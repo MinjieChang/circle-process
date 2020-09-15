@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+	<style>
+	
+	#circle{
+	 transition: all .5s;
+	 stroke-dasharray: 314,314;
+	 stroke-dashoffset: 314;
+	}
+	
+	svg:hover #circle{
+		stroke-dashoffset: 0;
+	}
+	</style>
+<body>
+
+<svg width="200" height="200" viewBox="0 0 200 200">
+  <circle id="circleBg" transform="rotate(-90 100 80)" cx="100" cy="80" r="50"  fill="none" stroke-width="10" stroke="gray" />
+  <circle id="circle" stroke-linecap="round" transform="rotate(-90 100 80)" cx="100" cy="80" r="50"  fill="none" stroke-width="10" stroke="green" />
+  <text x="100" y="80" fill="#6b778c" text-anchor="middle" dominant-baseline="central">
+    <tspan id="percent">0</tspan>%
+  </text>
+</svg>
+
+<div>
+
+  <button onclick="add()">add</button>
+  <button onclick="minus()">minus</button>
+</div>
+ 
+</body>
+
+<script>
+
+  let circle = document.getElementById('circle')
+  let percent = document.getElementById('percent')
+
+  let init = 314
+  let v = init
+
+  function getPercent(num) {
+    let percent = Math.round(((init - num) / init) * 100)
+    console.log(percent, 'percent')
+    return percent
+  }
+
+  function add(){
+    v = v - 20
+    console.log(v, 9999)
+    if(v <= 0 ) {
+      v = 0
+    }
+    percent.innerHTML = getPercent(v)
+    circle.style['stroke-dashoffset'] = v
+  }
+  function minus(){
+    v = v + 20
+    console.log(v, 9999)
+    if(v >= 314 ) {
+      v = 314
+    }
+    percent.innerHTML = getPercent(v)
+    circle.style['stroke-dashoffset'] = v
+  }
+</script>
+
+<script>
+
+  let circle = document.getElementById('circle')
+  let init = 314
+  let v = init
+  let timer = function start(){
+    setInterval(() => {
+      v = v-10
+      console.log(v, 9999)
+      if(v <= 0 ) {
+        v = 0
+        circle.style['stroke-dashoffset'] = v
+        return clearInterval(timer)
+      }
+      circle.style['stroke-dashoffset'] = v
+    }, 100)
+  }
+  start()
+</script>
+
+</html>

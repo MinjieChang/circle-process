@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<style>
+  .outer {
+    display: flex;
+  }
+  .left {
+    position: relative;
+    width : 100px;
+    height : 200px;
+    overflow: hidden;
+  }
+  .leftcircle {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 160px;
+    height: 160px;
+    border: 20px solid #999;
+    border-radius: 50%;
+    border-bottom-color: yellowgreen;
+    border-left-color: yellowgreen;
+    transform: rotate(-135deg);
+
+    transition: transform .5s;
+  }
+  .right {
+    position: relative;
+    width : 100px;
+    height : 200px;
+    overflow: hidden;
+  }
+  .rightcircle {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 160px;
+    height: 160px;
+    border: 20px solid #999;
+    border-radius: 50%;
+    border-top-color: yellowgreen;
+    border-right-color: yellowgreen;
+    transform: rotate(-135deg);
+
+    transition: transform .5s;
+  }
+</style>
+<body>
+  <div class="outer">
+    <div class="left">
+      <div class="leftcircle"></div>
+    </div>
+    <div class="right">
+      <div class="rightcircle"></div>
+    </div>
+  </div>
+  <div>
+    <button onclick="add()">add</button>
+  </div>
+</body>
+<script>
+  let angle = 10
+  let left = document.getElementsByClassName('leftcircle')[0]
+  let right = document.getElementsByClassName('rightcircle')[0]
+
+  let lastAngle = 0
+  function start(){
+    let gap = 0
+    if(angle > 180){
+      gap = angle - lastAngle
+    }
+    console.log(gap, 'gap=====')
+    if(angle <= 180){
+    // 右转左不转
+      right.style.cssText = `transform: rotate(${-135 + angle}deg)`
+    }else if(angle <= 180 + gap) {
+      console.log(angle, gap, 'jjjjjjjjj')
+      right.style.cssText = `transform: rotate(${-135 + 180}deg)`
+    }else if(angle <= 360) {
+      console.log('hhhhhhhhh')
+      // 右转且左转
+      right.style.cssText = `transform: rotate(${-135 + 180}deg)`
+      left.style.cssText = `transform: rotate(${-135 + angle - 180}deg)`
+    } else {
+      right.style.cssText = `transform: rotate(${-135 + 180}deg)`
+      left.style.cssText = `transform: rotate(${-135 + 180}deg)`
+    }
+    lastAngle = angle
+  }
+
+  function throttle(fn, delay = 1000){
+    let timer = null
+    let lastTime = Date.now()
+    return function () {
+        let nowTime = Date.now()
+        // 触发间隔是否小于 200 
+        let sp = nowTime - lastTime < delay
+        if( sp ) {
+            return
+        }
+        lastTime = nowTime
+        // 这样可以保证在最后一次被触发
+        timer = setTimeout(() => {
+          console.log('timer')
+          fn()
+          clearTimeout(timer)
+          timer = null
+        }, 10)
+    }
+  }
+
+  var newStart = throttle(start, 400)
+
+  function go(num) {
+    angle = num
+    newStart()
+  }
+
+
+  function walk(){
+    setTimeout(() => {
+      go(100)
+    }, 1000);
+    setTimeout(() => {
+      go(200)
+    }, 2000);
+    setTimeout(() => {
+      go(300)
+    }, 3000);
+    setTimeout(() => {
+      go(400)
+    }, 4000);
+  }
+  function add(){
+    walk()
+  }
+</script>
+</html>
